@@ -1,7 +1,7 @@
-import type { ContextMenuCommandDeniedPayload, Events } from '@sapphire/framework';
-import { Listener, UserError } from '@sapphire/framework';
+import { Listener, UserError, type ContextMenuCommandDeniedPayload, type Events } from '@sapphire/framework';
 
 export class UserEvent extends Listener<typeof Events.ContextMenuCommandDenied> {
+
 	public override async run({ context, message: content }: UserError, { interaction }: ContextMenuCommandDeniedPayload) {
 		// `context: { silent: true }` should make UserError silent:
 		// Use cases for this are for example permissions error when running the `eval` command.
@@ -20,4 +20,5 @@ export class UserEvent extends Listener<typeof Events.ContextMenuCommandDenied> 
 			ephemeral: true
 		});
 	}
+
 }

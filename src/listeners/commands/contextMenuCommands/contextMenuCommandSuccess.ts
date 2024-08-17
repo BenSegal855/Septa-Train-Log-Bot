@@ -3,6 +3,7 @@ import type { Logger } from '@sapphire/plugin-logger';
 import { logSuccessCommand } from '../../../lib/utils';
 
 export class UserListener extends Listener {
+
 	public override run(payload: ContextMenuCommandSuccessPayload) {
 		logSuccessCommand(payload);
 	}
@@ -11,4 +12,5 @@ export class UserListener extends Listener {
 		this.enabled = (this.container.logger as Logger).level <= LogLevel.Debug;
 		return super.onLoad();
 	}
+
 }
