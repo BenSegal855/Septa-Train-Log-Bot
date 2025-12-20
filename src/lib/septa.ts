@@ -1,5 +1,6 @@
 import { s } from '@sapphire/shapeshift';
 import axios from 'axios';
+import { VehicleType } from '../types/database';
 
 export class SEPTA {
 
@@ -17,7 +18,7 @@ export class SEPTA {
 				nextstop: s.string(),
 				line: s.string(),
 				consist: s.string(),
-				heading: s.string(),
+				heading: s.string().or(s.number()),
 				late: s.number(),
 				SOURCE: s.string(),
 				TRACK: s.string(),
@@ -42,9 +43,9 @@ export class SEPTA {
 		);
 	}
 
-	public static async findTrainByCar(number: string): Promise<TrainWithSchedule|undefined> {
+	public static async findTrainByCar(carNo: string): Promise<TrainWithSchedule|undefined> {
 		const trains = await this.getCurrentTrainView();
-		const desiredTrain = trains.find(train => train.cars.includes(number));
+		const desiredTrain = trains.find(train => train.cars.includes(carNo));
 
 		if (!desiredTrain) {
 			return;
@@ -54,16 +55,27 @@ export class SEPTA {
 		return { ...desiredTrain, schedule };
 	}
 
-	public static async getScheduleByTrainNumber(number: string): Promise<Schedule|undefined> {
+	public static async getTrainByNumber(trainNo: string): Promise<TrainWithSchedule|undefined> {
+		const trains = await this.getCurrentTrainView();
+		const desiredTrain = trains.find(train => train.trainNo === trainNo);
+
+		if (!desiredTrain) {
+			return;
+		}
+
+		const schedule = await this.getScheduleByTrainNumber(desiredTrain.trainNo);
+		return { ...desiredTrain, schedule };
+	}
+
+	public static async getScheduleByTrainNumber(number: string): Promise<Schedule> {
 		return this.axios.get(`/RRSchedules/index.php?req1=${number}`).then(res =>
 			s.object({
+				/* eslint-disable camelcase */
 				station: s.string(),
-				// eslint-disable-next-line camelcase
 				sched_tm: s.string(),
-				// eslint-disable-next-line camelcase
 				est_tm: s.string(),
-				// eslint-disable-next-line camelcase
 				act_tm: s.string()
+				/* eslint-enable camelcase */
 			}).transform(schedule => ({
 				station: schedule.station,
 				scheduledTime: schedule.sched_tm,
@@ -72,6 +84,23 @@ export class SEPTA {
 			})).array()
 				.parse(res.data)
 		);
+	}
+
+	public static getVehicleType(carNumber: string): VehicleType {
+		const carNo = parseInt(carNumber);
+
+		if (carNo > 2400 && carNo < 2560) {
+			return 'Bombardier';
+		}
+
+		if (carNo > 100 && carNo < 500) {
+			return 'Silverliner IV';
+		}
+
+		if (carNo > 700 && carNo < 900) {
+			return 'Silverliner V';
+		}
+		return 'Unknown';
 	}
 
 };
@@ -86,7 +115,7 @@ export type Train = {
 	nextStop: string,
 	line: string,
 	cars: string[],
-	heading: string,
+	heading: string|number,
 	late: number,
 	source: string,
 	track: string,
@@ -100,4 +129,4 @@ export type Schedule = {
 	actualTime: string
 }[];
 
-export type TrainWithSchedule = Train & { schedule?: Schedule };
+export type TrainWithSchedule = Train & { schedule: Schedule };

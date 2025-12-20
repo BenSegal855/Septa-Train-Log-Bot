@@ -17,33 +17,6 @@
         "no-extra-parens": ["warn", "all", {
             "nestedBinaryExpressions": false
         }],
-        "valid-jsdoc": ["warn", {
-            "requireReturn": false,
-            "requireReturnDescription": false,
-            "prefer": {
-                "arg": "param",
-                "argument": "param",
-                "prop": "property",
-                "constructor": "class",
-                "augments": "extends",
-                "fires": "emits",
-                "var": "member",
-                "yield": "yields",
-                "return": "returns",
-                "exception": "throws",
-                "virtual": "abstract"
-            },
-            "preferType": {
-                "String": "string",
-                "Number": "number",
-                "Boolean": "boolean",
-                "Symbol": "symbol",
-                "function": "Function",
-                "object": "Object",
-                "date": "Date",
-                "error": "Error"
-            }
-        }],
 		"deprecation/deprecation": "warn",
         "indent": ["error", "tab"],
         "accessor-pairs": "warn",
