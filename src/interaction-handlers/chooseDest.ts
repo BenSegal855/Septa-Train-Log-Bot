@@ -13,7 +13,7 @@ export class MenuHandler extends InteractionHandler {
 
 	public override parse(interaction: StringSelectMenuInteraction) {
 		if (!interaction.customId.startsWith('Dest')) return this.none();
-		const [_, id] = interaction.customId.split('|');
+		const [, id] = interaction.customId.split('|');
 
 		return this.some(new ObjectId(id));
 	}

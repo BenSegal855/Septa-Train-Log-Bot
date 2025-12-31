@@ -26,6 +26,7 @@ export type Ride = {
 export type VehicleType = 'Silverliner IV' | 'Silverliner V' | 'Bombardier' | 'Unknown';
 
 export type RideInProgress = {
+	user: string,
 	trainNumber: string,
 	destination: string,
 	estimatedTime: Date,

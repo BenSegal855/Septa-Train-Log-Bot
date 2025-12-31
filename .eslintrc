@@ -50,7 +50,6 @@
         "yoda": "error",
 
         "no-label-var": "error",
-        "no-shadow": "error",
         "no-undef-init": "error",
 
         "callback-return": "error",

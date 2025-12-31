@@ -30,6 +30,7 @@ export class MenuHandler extends InteractionHandler {
 		const isLastStop = schedule[schedule.length - 1].station === destination;
 
 		await this.container.db.ridesInProgress.insertOne({
+			user: interaction.user.id,
 			trainNumber,
 			destination,
 			estimatedTime: estimatedTime.toJSDate(),

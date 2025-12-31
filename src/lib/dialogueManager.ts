@@ -71,7 +71,7 @@ export class DialogueManager {
 		});
 
 
-		return new DialogueManager(message, user, await channel.fetch(true));
+		return new DialogueManager(message, user, await channel.fetch());
 	}
 
 	public async addDestinationSelect(schedule: Schedule, rideId: ObjectId) {
@@ -174,6 +174,12 @@ export class DialogueManager {
 				.setStyle(ButtonStyle.Danger)
 			));
 
+		if (process.env.NODE_ENV === 'development') {
+			containerComponent.setAccentColor([0x1F, 0x4F, 0xA3]);
+		} else if (process.env.NODE_ENV === 'test') {
+			containerComponent.setAccentColor([0xF1, 0x47, 0x28]);
+		}
+
 		this.updateDialogue(containerComponent, true, 15 * 60 * 1000);
 	}
 
@@ -247,7 +253,7 @@ export class DialogueManager {
 	}
 
 	private static getIdle(user: User) {
-		return new ContainerBuilder()
+		const containerComponent = new ContainerBuilder()
 			.addTextDisplayComponents(text => text.setContent('# Regional Rail Logging'))
 			.addSectionComponents(section => section
 				.addTextDisplayComponents(text => text.setContent('Let me know if you\'re on a train'))
@@ -257,6 +263,14 @@ export class DialogueManager {
 					.setStyle(ButtonStyle.Primary)
 				)
 			);
+
+		if (process.env.NODE_ENV === 'development') {
+			containerComponent.setAccentColor([0x1F, 0x4F, 0xA3]);
+		} else if (process.env.NODE_ENV === 'test') {
+			containerComponent.setAccentColor([0xF1, 0x47, 0x28]);
+		}
+
+		return containerComponent;
 	}
 
 }
