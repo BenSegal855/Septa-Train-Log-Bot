@@ -38,7 +38,7 @@ export class MenuHandler extends InteractionHandler {
 			isLastStop
 		});
 
-		return dm.confirmDestinationAndAddSource(interaction.values[0], schedule, rideId);
+		return dm.confirmDestinationAndAddSource(destination, schedule, rideId);
 	}
 
 	public override parse(interaction: StringSelectMenuInteraction) {
